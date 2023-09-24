@@ -187,7 +187,7 @@ python-multipart==0.0.5
 pytz==2023.3
 pyviz-comms==2.1.0
 PyYAML==5.4.1
-qpd==1.0
+qpd==0.4.3
 querystring-parser==2.1.0
 ray==1.11.0
 redis==4.2.0
