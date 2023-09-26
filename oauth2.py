@@ -20,7 +20,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class pydantic_TokenData(BaseModel):
-    id: Optional[str] = None
+    id: Optional[int] = None
 
 # verify if provided jwt token is correct
 def verify_jwt_token(jwt_token: str, credentials_exception):
