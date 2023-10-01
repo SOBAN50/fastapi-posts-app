@@ -4,6 +4,8 @@ WORKDIR /usr/src/app/
 
 COPY requirements.txt ./
 
+RUN apk --no-cache add build-base
+RUN apk --no-cache add postgresql-dev
 RUN pip install -r requirements.txt
 
 
