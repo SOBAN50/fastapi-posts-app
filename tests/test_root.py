@@ -1,0 +1,13 @@
+import os; import sys
+current = os.path.dirname(os.path.realpath(__file__)); parent = os.path.dirname(current); sys.path.append(parent)
+
+from fastapi import testclient
+from main import app
+
+client = testclient.TestClient(app)
+
+def test_root():
+    res = client.get("/")
+    print(res.json().get('Message'))
+    assert res.json().get('Message') == 'Welcome to my API'
+    assert res.status_code == 200
