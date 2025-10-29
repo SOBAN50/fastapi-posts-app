@@ -1,4 +1,10 @@
+import sys
+import os
 import pytest
+
+# Ensure repo root is in the import path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from config import Settings
 
 @pytest.fixture(autouse=True)
