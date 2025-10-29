@@ -6,28 +6,38 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: fastapi_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v4
       with:
         python-version: "3.10"
 
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        # Install dev tools (pytest, httpx, pytest-asyncio, pytest-cov)
-        pip install pytest pytest-asyncio httpx pytest-cov
+        pip install pytest pytest-asyncio httpx pytest-cov psycopg2-binary
 
     - name: Prepare environment
       run: |
-        # Copy example env file so Pydantic loads required variables
         cp .env.example .env
-        # Ensure project root is in Python path
         export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-    - name: Run tests with coverage
+    - name: Run tests
       run: |
         pytest --maxfail=1 --disable-warnings -q --cov=. --cov-report=term-missing
