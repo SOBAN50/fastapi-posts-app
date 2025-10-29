@@ -18,15 +18,16 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+        # Install dev tools (pytest, httpx, pytest-asyncio, pytest-cov)
+        pip install pytest pytest-asyncio httpx pytest-cov
 
     - name: Prepare environment
       run: |
-        # Copy the example environment file so Pydantic can read it
+        # Copy example env file so Pydantic loads required variables
         cp .env.example .env
-        # Ensure root is in Python path for imports like "from config import Settings"
+        # Ensure project root is in Python path
         export PYTHONPATH=$PYTHONPATH:$(pwd)
 
     - name: Run tests with coverage
       run: |
-        pytest --cov=. --cov-report=term-missing
+        pytest --maxfail=1 --disable-warnings -q --cov=. --cov-report=term-missing
